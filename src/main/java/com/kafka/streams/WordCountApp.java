@@ -51,5 +51,8 @@ public class WordCountApp {
         // printing the Topology
         System.out.println(streams.toString());
 
+        // shutdown hook to correctly close the streams application
+        Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+
     }
 }
