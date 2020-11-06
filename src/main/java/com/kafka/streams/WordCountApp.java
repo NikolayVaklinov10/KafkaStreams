@@ -48,6 +48,8 @@ public class WordCountApp {
         // to bring all together
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
+        // printing the Topology
+        System.out.println(streams.toString());
 
     }
 }
