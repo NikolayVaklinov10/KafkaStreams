@@ -43,7 +43,7 @@ public class BankBalanceExactlyOnceApp {
         StreamsBuilder builder = new StreamsBuilder();
 
         KStream<String, String> bankTransactions =
-                builder.stream("bank-transactions", Produced.with(Serdes.String(), jsonSerde);
+                builder.stream("bank-transactions");
 
         // create the initial json object for balances
         ObjectNode initialBalance = JsonNodeFactory.instance.objectNode();
@@ -52,7 +52,7 @@ public class BankBalanceExactlyOnceApp {
         initialBalance.put("time", Instant.ofEpochMilli(0L).toString());
 
         KTable<String, JsonNode> bankBalance = bankTransactions
-                .groupByKey(Serdes.String(), jsonSerde)
+                .groupByKey()
                 .aggregate(
                         () -> initialBalance,
                         (key, transaction, balance) -> newBalance(transaction, balance),
@@ -60,7 +60,7 @@ public class BankBalanceExactlyOnceApp {
                         "bank-balance-agg"
                 );
 
-        bankBalance.to(Serdes.String(), jsonSerde,"bank-balance-exactly-once");
+        bankBalance.toStream().to("bank-balance-exactly-once", Produced.with(Serdes.String(), jsonSerde));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.cleanUp();
