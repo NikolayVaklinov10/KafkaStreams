@@ -18,6 +18,7 @@ public class WordCountApp {
 
     public Topology createTopology(){
 
+
         // StreamBuilder is a way to write builder application
         StreamsBuilder builder = new StreamsBuilder();
         // 1 - stream from Kafka
