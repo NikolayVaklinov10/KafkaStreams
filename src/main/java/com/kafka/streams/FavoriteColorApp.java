@@ -32,7 +32,6 @@ public class FavoriteColorApp {
 
         // Step 1: We create the topic of users keys to colours
         KStream<String, String> textLines = builder.stream("favourite-colour-input");
-
         KStream<String, String> usersAndColours = textLines
                 // 1.1 we ensure that a comma is here as we will split on it
                 .filter((key, value) -> value.contains(","))
@@ -53,13 +52,10 @@ public class FavoriteColorApp {
                 // 4 - we group by colour within the KTable
                 .groupBy((user, colour) -> new KeyValue<>(colour,colour))
                 .count(Named.as("CountsByColours"));
-
         // 6 - we output the results to a Kafka Topic - don't forget the serializers
         favouriteColours.toStream().to("favourite-colour-output", Produced.with(Serdes.String(), Serdes.Long()));
-
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
-
         // print the topology
         System.out.println(streams.toString());
 
