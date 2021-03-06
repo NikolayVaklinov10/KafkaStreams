@@ -27,7 +27,6 @@ public class FavoriteColorApp {
         // demonstrating all the "steps" involved in the transformation - not recommended in production
         config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, "0");
 
-
         StreamsBuilder builder = new StreamsBuilder();
 
         // Step 1: We create the topic of users keys to colours
