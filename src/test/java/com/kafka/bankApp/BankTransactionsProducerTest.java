@@ -14,6 +14,8 @@ public class BankTransactionsProducerTest {
         String value = record.value();
 
         assertEquals(key, "john");
+        System.out.println(value);
+
 
 
     }
