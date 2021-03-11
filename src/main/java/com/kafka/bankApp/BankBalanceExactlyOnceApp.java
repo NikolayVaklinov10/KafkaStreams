@@ -14,8 +14,6 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Produced;
 
 import java.time.Instant;
 import java.util.Properties;
@@ -51,16 +49,16 @@ public class BankBalanceExactlyOnceApp {
         initialBalance.put("balance", 0);
         initialBalance.put("time", Instant.ofEpochMilli(0L).toString());
 
-        KTable<String, JsonNode> bankBalance = bankTransactions
-                .groupByKey()
-                .aggregate(
-                        () -> initialBalance,
-                        (key, transaction, balance) -> newBalance(transaction, balance),
-                        jsonSerde,
-                        "bank-balance-agg"
-                );
+//        KTable<String, JsonNode> bankBalance = bankTransactions
+//                .groupByKey()
+//                .aggregate(
+//                        () -> initialBalance,
+//                        (key, transaction, balance) -> newBalance(transaction, balance),
+//                        jsonSerde,
+//                        "bank-balance-agg"
+//                );
 
-        bankBalance.toStream().to("bank-balance-exactly-once", Produced.with(Serdes.String(), jsonSerde));
+//        bankBalance.toStream().to("bank-balance-exactly-once", Produced.with(Serdes.String(), jsonSerde));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.cleanUp();
