@@ -55,8 +55,6 @@ public class WordCountApp {
 
         WordCountApp wordCountApp = new WordCountApp();
 
-
-
         // to bring all together
         KafkaStreams streams = new KafkaStreams(wordCountApp.createTopology(), config);
         streams.start();
