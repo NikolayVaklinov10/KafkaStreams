@@ -23,12 +23,9 @@ public class FavoriteColorApp {
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-
         // demonstrating all the "steps" involved in the transformation - not recommended in production
         config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, "0");
-
         StreamsBuilder builder = new StreamsBuilder();
-
         // Step 1: We create the topic of users keys to colours
         KStream<String, String> textLines = builder.stream("favourite-colour-input");
         KStream<String, String> usersAndColours = textLines
@@ -40,12 +37,9 @@ public class FavoriteColorApp {
                 .mapValues(value -> value.split(",")[1].toLowerCase())
                 // 1.4 we filter undesired colours (could be a data sanitization step)
                 .filter((user, colour) -> Arrays.asList("green", "blue", "red").contains(colour));
-
         usersAndColours.to("user-keys-and-colours");
-
         // step 2 - we read that topic as a KTable so that updates are read correctly
         KTable<String, String> usersAndColoursTable = builder.table("user-keys-and-colours");
-
         // step 3 - we count the occurrences of colours
         KTable<String, Long> favouriteColours = usersAndColoursTable
                 // 4 - we group by colour within the KTable
@@ -57,7 +51,6 @@ public class FavoriteColorApp {
         streams.start();
         // print the topology
         System.out.println(streams.toString());
-
         // shutdown hook to correctly close the streams application
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
