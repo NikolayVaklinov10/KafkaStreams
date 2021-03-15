@@ -51,8 +51,9 @@ public class BankBalanceExactlyOnceApp {
         initialBalance.put("balance", 0);
         initialBalance.put("time", Instant.ofEpochMilli(0L).toString());
 
+        // note: after kafka 2.1 Serialized is replaced with Grouped
         KTable<String, JsonNode> bankBalance = bankTransactions
-                .groupByKey(Serialized.with(Serdes.String(), jsonSerde))
+                .groupByKey(Grouped.with(Serdes.String(), jsonSerde))
                 .aggregate(
                         () -> initialBalance,
                         (key, transaction, balance) -> newBalance(transaction, balance),
