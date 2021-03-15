@@ -25,9 +25,11 @@ public class FavoriteColorApp {
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         // demonstrating all the "steps" involved in the transformation - not recommended in production
         config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, "0");
+
         StreamsBuilder builder = new StreamsBuilder();
         // Step 1: We create the topic of users keys to colours
         KStream<String, String> textLines = builder.stream("favourite-colour-input");
+
         KStream<String, String> usersAndColours = textLines
                 // 1.1 we ensure that a comma is here as we will split on it
                 .filter((key, value) -> value.contains(","))
@@ -38,6 +40,7 @@ public class FavoriteColorApp {
                 // 1.4 we filter undesired colours (could be a data sanitization step)
                 .filter((user, colour) -> Arrays.asList("green", "blue", "red").contains(colour));
         usersAndColours.to("user-keys-and-colours");
+
         // step 2 - we read that topic as a KTable so that updates are read correctly
         KTable<String, String> usersAndColoursTable = builder.table("user-keys-and-colours");
         // step 3 - we count the occurrences of colours
@@ -47,6 +50,7 @@ public class FavoriteColorApp {
                 .count(Named.as("CountsByColours"));
         // 6 - we output the results to a Kafka Topic - don't forget the serializers
         favouriteColours.toStream().to("favourite-colour-output", Produced.with(Serdes.String(), Serdes.Long()));
+
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
         // print the topology
