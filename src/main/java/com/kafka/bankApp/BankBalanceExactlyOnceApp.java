@@ -45,6 +45,7 @@ public class BankBalanceExactlyOnceApp {
         KStream<String, JsonNode> bankTransactions =
                 builder.stream("bank-transactions",Consumed.with(Serdes.String(),jsonSerde));
 
+
         // create the initial json object for balances
         ObjectNode initialBalance = JsonNodeFactory.instance.objectNode();
         initialBalance.put("count", 0);
