@@ -76,6 +76,7 @@ public class UserDataProducer {
         producer.close();
     }
 
+
     private static ProducerRecord<String, String> userRecord(String key, String value){
         return new ProducerRecord<>("user-table", key, value);
     }
