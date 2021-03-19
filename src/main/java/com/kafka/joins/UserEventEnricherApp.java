@@ -22,6 +22,7 @@ public class UserEventEnricherApp {
 
         StreamsBuilder builder = new StreamsBuilder();
 
+
         // we get a global table out of Kafka. This table will be replicated on each Kafka Streams application
         // the key of our globalKTable is the user ID
         GlobalKTable<String, String> usersGlobalTable = builder.globalTable("user-table");
