@@ -21,10 +21,12 @@ public class BankTransactionsProducer {
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
         // producer acks
         properties.setProperty(ProducerConfig.ACKS_CONFIG, "all"); // strongest producing guarantee
         properties.setProperty(ProducerConfig.RETRIES_CONFIG, "3");
         properties.setProperty(ProducerConfig.LINGER_MS_CONFIG, "1");
+
         // leverage idempotent producer from Kafka 0.11 !!
         properties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
 
