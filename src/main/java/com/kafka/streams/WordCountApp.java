@@ -45,7 +45,7 @@ public class WordCountApp {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG,"word-count-application");
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
@@ -60,6 +60,9 @@ public class WordCountApp {
         streams.start();
         // printing the Topology
         System.out.println(streams.toString());
+
+    // in this example we just let it run for some time and stop since the input data is finite.
+        Thread.sleep(5000L);
 
         // shutdown hook to correctly close the streams application
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
