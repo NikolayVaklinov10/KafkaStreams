@@ -1,4 +1,4 @@
-package com.kafka.stockstats.model;
+package com.kafka.clickstream.model;
 
 public class UserProfile {
     int userID;
